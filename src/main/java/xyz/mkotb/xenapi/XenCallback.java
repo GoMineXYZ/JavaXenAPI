@@ -15,6 +15,10 @@
  */
 package xyz.mkotb.xenapi;
 
+import xyz.mkotb.xenapi.ex.XenAPIException;
+
 public interface XenCallback<T> {
     void callback(T value);
+
+    void error(XenAPIException ex);
 }

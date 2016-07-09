@@ -53,7 +53,16 @@ public final class XenAPI {
             http.asJsonAsync(new Callback<JsonNode>() {
                 @Override
                 public void completed(HttpResponse<JsonNode> httpResponse) {
-                    callback.callback(parseResponse(request, httpResponse.getBody().getObject()));
+                    T response;
+
+                    try {
+                        response = parseResponse(request, httpResponse.getBody().getObject());
+                    } catch (XenAPIException ex) {
+                        callback.error(ex);
+                        return;
+                    }
+
+                    callback.callback(response);
                 }
 
                 @Override
