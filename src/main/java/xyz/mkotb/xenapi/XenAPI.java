@@ -24,12 +24,10 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import org.json.JSONObject;
 import xyz.mkotb.xenapi.ex.XenAPIException;
-import xyz.mkotb.xenapi.req.AuthenticateRequest;
-import xyz.mkotb.xenapi.req.BaseRequestImpl;
-import xyz.mkotb.xenapi.req.EditUserRequest;
-import xyz.mkotb.xenapi.req.RegisterRequest;
+import xyz.mkotb.xenapi.req.*;
 import xyz.mkotb.xenapi.resp.AuthenticateResponse;
 import xyz.mkotb.xenapi.resp.EditUserResponse;
+import xyz.mkotb.xenapi.resp.GetUserResponse;
 import xyz.mkotb.xenapi.resp.RegisterResponse;
 
 public final class XenAPI {
@@ -108,5 +106,13 @@ public final class XenAPI {
 
     public AuthenticateResponse authenticate(AuthenticateRequest request) {
         return request(request, null);
+    }
+
+    public GetUserResponse getUser(GetUserRequest request) {
+        return request(request, null);
+    }
+
+    public void getUserAsync(GetUserRequest request, XenCallback<GetUserResponse> callback) {
+        request(request, callback);
     }
 }

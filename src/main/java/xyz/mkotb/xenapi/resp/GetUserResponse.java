@@ -17,11 +17,23 @@ package xyz.mkotb.xenapi.resp;
 
 import com.google.gson.annotations.SerializedName;
 
-public class EditUserResponse extends UserResponse {
-    @SerializedName("trophy_points")
-    private int trophyPoints;
+public class GetUserResponse extends ExtendedUserResponse {
+    @SerializedName(value = "mood_id")
+    private int moodId;
+    @SerializedName(value = "friend_count")
+    private int friendCount;
+    @SerializedName(value = "personal_friend_count")
+    private int personalFriendCount;
 
-    public int trophyPoints() {
-        return trophyPoints;
+    public int moodId() {
+        return moodId;
+    }
+
+    public int friendCount() {
+        return friendCount;
+    }
+
+    public int personalFriendCount() {
+        return personalFriendCount;
     }
 }

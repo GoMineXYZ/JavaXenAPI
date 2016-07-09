@@ -13,15 +13,18 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package xyz.mkotb.xenapi.resp;
+package xyz.mkotb.xenapi.req;
 
-import com.google.gson.annotations.SerializedName;
+import xyz.mkotb.xenapi.resp.BaseResponse;
+import xyz.mkotb.xenapi.resp.GetUserResponse;
 
-public class EditUserResponse extends UserResponse {
-    @SerializedName("trophy_points")
-    private int trophyPoints;
+public class GetUserRequest extends BaseRequestImpl {
+    public GetUserRequest() {
+        super("getUser");
+    }
 
-    public int trophyPoints() {
-        return trophyPoints;
+    @Override
+    public Class<? extends BaseResponse> responseClass() {
+        return GetUserResponse.class;
     }
 }

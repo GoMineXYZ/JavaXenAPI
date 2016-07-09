@@ -13,15 +13,9 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package xyz.mkotb.xenapi.resp;
+package xyz.mkotb.xenapi.user;
 
-import com.google.gson.annotations.SerializedName;
-
-public class EditUserResponse extends UserResponse {
-    @SerializedName("trophy_points")
-    private int trophyPoints;
-
-    public int trophyPoints() {
-        return trophyPoints;
-    }
+public enum UserAccessible {
+    EVERYONE,
+    MEMBERS
 }
