@@ -19,8 +19,9 @@ import xyz.mkotb.xenapi.resp.BaseResponse;
 import xyz.mkotb.xenapi.resp.GetUserResponse;
 
 public class GetUserRequest extends BaseRequestImpl {
-    public GetUserRequest() {
+    public GetUserRequest(String name) {
         super("getUser");
+        set("value", name);
     }
 
     @Override
