@@ -22,9 +22,10 @@ import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import xyz.mkotb.xenapi.req.BaseRequestImpl;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import xyz.mkotb.xenapi.req.EditUserRequest;
+import xyz.mkotb.xenapi.req.RegisterRequest;
+import xyz.mkotb.xenapi.resp.EditUserResponse;
+import xyz.mkotb.xenapi.resp.RegisterResponse;
 
 public final class XenAPI {
     private static final Gson GSON = new Gson();
@@ -32,12 +33,7 @@ public final class XenAPI {
     private final String apiKey;
 
     private XenAPI(String baseUrl, String apiKey) {
-        try {
-            this.baseUrl = "https://" + new URL(baseUrl).getHost() + "/api.php";
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
-
+        this.baseUrl = baseUrl;
         this.apiKey = apiKey;
     }
 
@@ -79,5 +75,21 @@ public final class XenAPI {
 
     private <T> T parseResponse(BaseRequestImpl request, String response) {
         return (T) GSON.fromJson(response, request.responseClass());
+    }
+
+    public EditUserResponse editUser(EditUserRequest request) {
+        return request(request, null);
+    }
+
+    public void editUserAsync(EditUserRequest request, XenCallback<EditUserResponse> callback) {
+        request(request, callback);
+    }
+
+    public RegisterResponse registerUser(RegisterRequest request) {
+        return request(request, null);
+    }
+
+    public void registerUserAsync(RegisterRequest request, XenCallback<RegisterResponse> callback) {
+        request(request, callback);
     }
 }

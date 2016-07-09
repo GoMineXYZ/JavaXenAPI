@@ -18,8 +18,8 @@ package xyz.mkotb.xenapi.req;
 import xyz.mkotb.xenapi.XenUtils;
 import xyz.mkotb.xenapi.resp.BaseResponse;
 import xyz.mkotb.xenapi.resp.EditUserResponse;
+import xyz.mkotb.xenapi.user.UserState;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class EditUserRequest extends BaseRequestImpl {
@@ -136,12 +136,12 @@ public class EditUserRequest extends BaseRequestImpl {
         return this;
     }
 
-    public String userState() {
-        return castGet("user_state", String.class);
+    public UserState userState() {
+        return UserState.byId(castGet("user_state", String.class));
     }
 
-    public EditUserRequest userState(String userState) {
-        set("user_state", userState);
+    public EditUserRequest userState(UserState userState) {
+        set("user_state", userState.toString());
         return this;
     }
 
