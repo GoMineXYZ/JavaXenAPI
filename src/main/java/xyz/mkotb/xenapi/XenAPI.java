@@ -17,13 +17,18 @@ package xyz.mkotb.xenapi;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
+import org.json.JSONObject;
+import xyz.mkotb.xenapi.ex.XenAPIException;
+import xyz.mkotb.xenapi.req.AuthenticateRequest;
 import xyz.mkotb.xenapi.req.BaseRequestImpl;
 import xyz.mkotb.xenapi.req.EditUserRequest;
 import xyz.mkotb.xenapi.req.RegisterRequest;
+import xyz.mkotb.xenapi.resp.AuthenticateResponse;
 import xyz.mkotb.xenapi.resp.EditUserResponse;
 import xyz.mkotb.xenapi.resp.RegisterResponse;
 
@@ -47,10 +52,10 @@ public final class XenAPI {
                 .queryString(request.fieldMap());
 
         if (callback != null) {
-            http.asStringAsync(new Callback<String>() {
+            http.asJsonAsync(new Callback<JsonNode>() {
                 @Override
-                public void completed(HttpResponse<String> httpResponse) {
-                    callback.callback(parseResponse(request, httpResponse.getBody()));
+                public void completed(HttpResponse<JsonNode> httpResponse) {
+                    callback.callback(parseResponse(request, httpResponse.getBody().getObject()));
                 }
 
                 @Override
@@ -66,15 +71,23 @@ public final class XenAPI {
             return null;
         } else {
             try {
-                return parseResponse(request, http.asString().getBody());
+                return parseResponse(request, http.asJson().getBody().getObject());
             } catch (UnirestException ex) {
                 throw new RuntimeException(ex); // make better
             }
         }
     }
 
-    private <T> T parseResponse(BaseRequestImpl request, String response) {
-        return (T) GSON.fromJson(response, request.responseClass());
+    private <T> T parseResponse(BaseRequestImpl request, JSONObject response) {
+        if (response.has("error") && response.has("message")) {
+            throw new XenAPIException(response.getInt("error"), response.getString("message"));
+        }
+
+        if (response.has("error_id") && response.has("error_phrase")) {
+            throw new XenAPIException(response.getInt("error_id"), response.getString("error_phrase"));
+        }
+
+        return (T) GSON.fromJson(response.toString(), request.responseClass());
     }
 
     public EditUserResponse editUser(EditUserRequest request) {
@@ -91,5 +104,9 @@ public final class XenAPI {
 
     public void registerUserAsync(RegisterRequest request, XenCallback<RegisterResponse> callback) {
         request(request, callback);
+    }
+
+    public AuthenticateResponse authenticate(AuthenticateRequest request) {
+        return request(request, null);
     }
 }
