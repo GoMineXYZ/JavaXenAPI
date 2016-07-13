@@ -16,7 +16,7 @@
 package xyz.mkotb.xenapi.resp;
 
 import com.google.gson.annotations.SerializedName;
-import xyz.mkotb.xenapi.user.UserAccessible;
+import xyz.mkotb.xenapi.model.UserAccessible;
 
 import java.util.Date;
 

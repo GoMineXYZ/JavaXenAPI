@@ -13,34 +13,42 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package xyz.mkotb.xenapi.user;
+package xyz.mkotb.xenapi.model;
 
-public enum UserState {
-    PENDING_CONFIRMATION("email_confirm"),
-    MODERATED("moderated"),
-    VALID("valid");
+import java.util.Date;
 
-    private String id;
+public class LastPost {
+    private final int id;
+    private final Date date;
+    private final int userId;
+    private final String username;
+    private final String title;
 
-    UserState(String id) {
+    public LastPost(int id, long date, int userId, String username, String title) {
         this.id = id;
+        this.date = new Date(date);
+        this.userId = userId;
+        this.username = username;
+        this.title = title;
     }
 
-    public static UserState byId(String id) {
-        switch (id.toLowerCase()) {
-            case "email_confirm":
-                return PENDING_CONFIRMATION;
-            case "moderated":
-                return MODERATED;
-            case "valid":
-                return VALID;
-            default:
-                return null;
-        }
-    }
-
-    @Override
-    public String toString() {
+    public int id() {
         return id;
+    }
+
+    public Date date() {
+        return date;
+    }
+
+    public int userId() {
+        return userId;
+    }
+
+    public String username() {
+        return username;
+    }
+
+    public String title() {
+        return title;
     }
 }

@@ -13,9 +13,19 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package xyz.mkotb.xenapi.user;
+package xyz.mkotb.xenapi.req;
 
-public enum UserAccessible {
-    EVERYONE,
-    MEMBERS
+import xyz.mkotb.xenapi.resp.BaseResponse;
+import xyz.mkotb.xenapi.resp.NodeResponse;
+
+public class GetNodeRequest extends BaseRequestImpl {
+    public GetNodeRequest(String id) {
+        super("getNode");
+        set("value", id);
+    }
+
+    @Override
+    public Class<? extends BaseResponse> responseClass() {
+        return NodeResponse.class;
+    }
 }

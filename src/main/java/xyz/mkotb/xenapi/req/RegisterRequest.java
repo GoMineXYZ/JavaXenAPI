@@ -18,7 +18,7 @@ package xyz.mkotb.xenapi.req;
 import xyz.mkotb.xenapi.XenUtils;
 import xyz.mkotb.xenapi.resp.BaseResponse;
 import xyz.mkotb.xenapi.resp.RegisterResponse;
-import xyz.mkotb.xenapi.user.UserState;
+import xyz.mkotb.xenapi.model.UserState;
 
 import java.util.Map;
 

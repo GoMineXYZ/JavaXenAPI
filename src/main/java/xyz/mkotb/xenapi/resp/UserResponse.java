@@ -17,9 +17,8 @@ package xyz.mkotb.xenapi.resp;
 
 import com.google.gson.annotations.SerializedName;
 import xyz.mkotb.xenapi.XenUtils;
-import xyz.mkotb.xenapi.user.UserState;
+import xyz.mkotb.xenapi.model.UserState;
 
-import java.util.Date;
 import java.util.Map;
 
 public class UserResponse extends BaseResponse {

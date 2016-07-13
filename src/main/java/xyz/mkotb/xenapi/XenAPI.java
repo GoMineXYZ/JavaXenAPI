@@ -25,12 +25,9 @@ import com.mashape.unirest.request.HttpRequest;
 import org.json.JSONObject;
 import xyz.mkotb.xenapi.ex.XenAPIException;
 import xyz.mkotb.xenapi.req.*;
-import xyz.mkotb.xenapi.resp.AuthenticateResponse;
-import xyz.mkotb.xenapi.resp.EditUserResponse;
-import xyz.mkotb.xenapi.resp.GetUserResponse;
-import xyz.mkotb.xenapi.resp.RegisterResponse;
+import xyz.mkotb.xenapi.resp.*;
 
-public final class XenAPI {
+public class XenAPI {
     private static final Gson GSON = new Gson();
     private final String baseUrl;
     private final String apiKey;
@@ -122,6 +119,46 @@ public final class XenAPI {
     }
 
     public void getUserAsync(GetUserRequest request, XenCallback<GetUserResponse> callback) {
+        request(request, callback);
+    }
+
+    public AddonResponse getAddon(GetAddonRequest request) {
+        return request(request, null);
+    }
+
+    public void getAddonAsync(GetAddonRequest request, XenCallback<AddonResponse> callback) {
+        request(request, callback);
+    }
+
+    public GetAddonsResponse getAddons(GetAddonsRequest request) {
+        return request(request, null);
+    }
+
+    public void getAddonsAsync(GetAddonsRequest request, XenCallback<GetAddonsResponse> callback) {
+        request(request, callback);
+    }
+
+    public GetGroupResponse getGroup(GetGroupRequest request) {
+        return request(request, null);
+    }
+
+    public void getGroupAsync(GetGroupRequest request, XenCallback<GetGroupResponse> callback) {
+        request(request, callback);
+    }
+
+    public NodeResponse getNode(GetNodeRequest request) {
+        return request(request, null);
+    }
+
+    public void getNodeAsync(GetNodeRequest request, XenCallback<NodeResponse> callback) {
+        request(request, callback);
+    }
+
+    public GetNodesResponse getNodes(GetNodesRequest request) {
+        return request(request, null);
+    }
+
+    public void getNodesAsync(GetNodesRequest request, XenCallback<GetNodesResponse> callback) {
         request(request, callback);
     }
 }
