@@ -13,12 +13,13 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
-package xyz.mkotb.xenapi.resp;
+package xyz.mkotb.xenapi.ex;
 
-public class AuthenticateResponse extends BaseResponse {
-    private String hash;
+import xyz.mkotb.xenapi.model.AuthType;
 
-    public String hash() {
-        return hash;
+public class InvalidAuthenticationException extends RuntimeException {
+    public InvalidAuthenticationException(AuthType required, AuthType current) {
+        super("Invalid authentication! " + required.name() + " is required! " +
+                "Current auth is " + current.name());
     }
 }

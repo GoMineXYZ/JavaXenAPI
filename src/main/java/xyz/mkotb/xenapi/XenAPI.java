@@ -23,28 +23,102 @@ import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
 import org.json.JSONObject;
+import xyz.mkotb.xenapi.ex.InvalidAuthenticationException;
 import xyz.mkotb.xenapi.ex.XenAPIException;
+import xyz.mkotb.xenapi.model.AuthType;
 import xyz.mkotb.xenapi.req.*;
 import xyz.mkotb.xenapi.resp.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class XenAPI {
     private static final Gson GSON = new Gson();
+    private final Map<String, AuthType> requirements;
+    private final AuthType authType;
     private final String baseUrl;
     private final String apiKey;
+    private final String username;
+    private final String passwordHash;
+
+    private XenAPI(String baseUrl) {
+        this.baseUrl = baseUrl;
+        this.apiKey = null;
+        this.username = null;
+        this.passwordHash = null;
+        this.requirements = fetchRequirements();
+        this.authType = AuthType.PUBLIC;
+    }
 
     private XenAPI(String baseUrl, String apiKey) {
         this.baseUrl = baseUrl;
         this.apiKey = apiKey;
+        this.username = null;
+        this.passwordHash = null;
+        this.requirements = fetchRequirements();
+        this.authType = AuthType.API_KEY;
+    }
+
+    private XenAPI(String baseUrl, String username, String password) {
+        this.baseUrl = baseUrl;
+        this.apiKey = null;
+        this.username = username;
+        this.requirements = fetchRequirements();
+        this.passwordHash = authenticate(new AuthenticateRequest(username, password)).hash();
+        this.authType = isAdmin() ? AuthType.ADMINISTRATOR : AuthType.AUTHENTICATED;
+    }
+
+    public static XenAPI create(String baseUrl) {
+        return new XenAPI(baseUrl);
     }
 
     public static XenAPI create(String baseUrl, String apiKey) {
         return new XenAPI(baseUrl, apiKey);
     }
 
+    public static XenAPI create(String baseUrl, String username, String password) {
+        return new XenAPI(baseUrl, username, password);
+    }
+
+    public boolean isAdmin() {
+        if (username == null)
+            throw new UnsupportedOperationException("This must be a user-auth'd API to use isAdmin!");
+
+        if (authType != null)
+            return authType == AuthType.ADMINISTRATOR;
+
+        return getUser(new GetUserRequest(username)).isAdmin();
+    }
+
+    private Map<String, AuthType> fetchRequirements() {
+        try {
+            Map<String, AuthType> map = new HashMap<>();
+            JSONObject object = Unirest.get(baseUrl)
+                    .queryString("action", "getActions").asJson()
+                    .getBody().getObject();
+
+            object.keySet().forEach((fun) -> map.put(fun, AuthType.valueOf(
+                    object.getString(fun))));
+
+            return Collections.unmodifiableMap(map);
+        } catch (UnirestException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     private <T> T request(BaseRequestImpl request, XenCallback<T> callback) {
         HttpRequest http = Unirest.get(baseUrl)
-                .queryString("hash", apiKey)
+                .queryString("hash", apiKey == null ? username + ":" + passwordHash : apiKey)
                 .queryString(request.fieldMap());
+
+        if (requirements.containsKey(request.get("action")) && authType != null) {
+            AuthType requiredAuth = requirements.get("action");
+
+            if (requiredAuth.ordinal() > authType.ordinal()) {
+                throw new InvalidAuthenticationException(requiredAuth, authType);
+            }
+        }
 
         if (callback != null) {
             http.asJsonAsync(new Callback<JsonNode>() {
