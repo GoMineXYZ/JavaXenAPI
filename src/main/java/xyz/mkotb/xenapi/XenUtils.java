@@ -28,11 +28,15 @@ public final class XenUtils {
         Map<String, String> map = new HashMap<>();
 
         for (String s : array) {
-            String[] entry = s.split(",", 2);
+            String[] entry = s.split("=");
             map.put(entry[0], entry[1]);
         }
 
         return map;
+    }
+
+    public static Map<String, String> decodeMap(String value) {
+        return decodeMap(value.split(","));
     }
 
     public static String[] encodeMap(Map<String, String> map) {

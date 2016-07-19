@@ -16,8 +16,10 @@
 package xyz.mkotb.xenapi.resp;
 
 import com.google.gson.annotations.SerializedName;
+import xyz.mkotb.xenapi.XenUtils;
 
 import java.util.Date;
+import java.util.Map;
 
 public class ExtendedUserResponse extends UserResponse {
     @SerializedName(value = "secondary_group_ids")
@@ -54,6 +56,8 @@ public class ExtendedUserResponse extends UserResponse {
     private int likeCount;
     @SerializedName(value = "warning_points")
     private int warningPoints;
+    @SerializedName(value = "custom_fields")
+    private String customFields;
 
     public boolean isModerator() {
         return moderator == 1;
@@ -121,5 +125,9 @@ public class ExtendedUserResponse extends UserResponse {
 
     public int warningPoints() {
         return warningPoints;
+    }
+
+    public Map<String, String> customFields() {
+        return XenUtils.decodeMap(customFields);
     }
 }

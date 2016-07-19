@@ -40,8 +40,6 @@ public class UserResponse extends BaseResponse {
     @SerializedName(value = "dob_year")
     private int yearOfBirth;
     private String state;
-    @SerializedName(value = "custom_fields")
-    private String[] customFields;
     @SerializedName("add_groups")
     private String addGroups;
     @SerializedName("remove_groups")
@@ -97,10 +95,6 @@ public class UserResponse extends BaseResponse {
 
     public UserState state() {
         return UserState.byId(state);
-    }
-
-    public Map<String, String> customFields() {
-        return XenUtils.decodeMap(customFields);
     }
 
     public String[] addGroups() {
