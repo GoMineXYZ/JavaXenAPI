@@ -41,6 +41,7 @@ public class XenAPI {
     private final String apiKey;
     private final String username;
     private final String passwordHash;
+    private boolean debug = false;
 
     private XenAPI(String baseUrl) {
         this.baseUrl = baseUrl;
@@ -81,6 +82,21 @@ public class XenAPI {
         return new XenAPI(baseUrl, username, password);
     }
 
+    public boolean debugEnabled() {
+        return debug;
+    }
+
+    public XenAPI toggleDebug() {
+        debug = !debug;
+        return this;
+    }
+
+    private void debug(String message) {
+        if (debug) {
+            System.out.println("XenAPI Debug: " + message);
+        }
+    }
+
     public boolean isAdmin() {
         if (username == null)
             throw new UnsupportedOperationException("This must be a user-auth'd API to use isAdmin!");
@@ -112,6 +128,8 @@ public class XenAPI {
                 .queryString("hash", apiKey == null ? username + ":" + passwordHash : apiKey)
                 .queryString(request.fieldMap());
 
+        debug("making request " + request.get("action") + " with base url " + baseUrl);
+
         if (requirements.containsKey(request.get("action")) && authType != null) {
             AuthType requiredAuth = requirements.get("action");
 
@@ -124,10 +142,12 @@ public class XenAPI {
             http.asJsonAsync(new Callback<JsonNode>() {
                 @Override
                 public void completed(HttpResponse<JsonNode> httpResponse) {
+                    JsonNode node = httpResponse.getBody();
                     T response;
 
                     try {
-                        response = parseResponse(request, httpResponse.getBody().getObject());
+                        debug(request.get("action") + "'s response: " + node.toString());
+                        response = parseResponse(request, node.getObject());
                     } catch (XenAPIException ex) {
                         callback.error(ex);
                         return;
@@ -143,13 +163,16 @@ public class XenAPI {
 
                 @Override
                 public void cancelled() {
-                    // no
+                    debug("Request " + request.get("action") + " was cancelled for some reason");
                 }
             });
             return null;
         } else {
             try {
-                return parseResponse(request, http.asJson().getBody().getObject());
+                JsonNode node = http.asJson().getBody();
+
+                debug(request.get("action") + "'s response: " + node.toString());
+                return parseResponse(request, node.getObject());
             } catch (UnirestException ex) {
                 throw new RuntimeException(ex); // make better
             }
