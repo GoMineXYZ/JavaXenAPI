@@ -94,11 +94,11 @@ public class RegisterResponse extends ExtendedUserResponse {
     }
 
     public UserAccessible allowPersonalMessaging() {
-        return UserAccessible.valueOf(allowPm);
+        return UserAccessible.valueOf(allowPm.toUpperCase());
     }
 
     public UserAccessible allowViewIdentities() {
-        return UserAccessible.valueOf(allowViewIdentities);
+        return UserAccessible.valueOf(allowViewIdentities.toUpperCase());
     }
 
     public boolean rteEnabled() {
