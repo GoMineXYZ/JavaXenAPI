@@ -41,7 +41,7 @@ public class UserResponse extends BaseResponse {
     private int yearOfBirth;
     private String state;
     @SerializedName(value = "custom_fields")
-    private String customFields;
+    private String[] customFields;
     @SerializedName("add_groups")
     private String addGroups;
     @SerializedName("remove_groups")

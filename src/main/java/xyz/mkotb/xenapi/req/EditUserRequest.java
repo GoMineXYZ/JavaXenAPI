@@ -146,7 +146,7 @@ public class EditUserRequest extends BaseRequestImpl {
     }
 
     public Map<String, String> customFields() {
-        String value = castGet("custom_fields", String.class);
+        String[] value = (String[]) get("custom_fields");
 
         if (value == null) {
             return null;

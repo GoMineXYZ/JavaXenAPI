@@ -17,15 +17,15 @@ package xyz.mkotb.xenapi;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class XenUtils {
     private XenUtils() {
     }
 
     // custom_field_1=custom_value_1,custom_field_2=custom_value_2
-    public static Map<String, String> decodeMap(String value) {
+    public static Map<String, String> decodeMap(String[] array) {
         Map<String, String> map = new HashMap<>();
-        String[] array = value.split(",");
 
         for (String s : array) {
             String[] entry = s.split(",", 2);
@@ -35,13 +35,12 @@ public final class XenUtils {
         return map;
     }
 
-    public static String encodeMap(Map<String, String> map) {
-        StringBuilder builder = new StringBuilder();
+    public static String[] encodeMap(Map<String, String> map) {
+        String[] array = new String[map.size()];
+        AtomicInteger integer = new AtomicInteger(0);
 
-        map.forEach((key, value) -> builder.append(key)
-                .append('=').append(value).append(','));
+        map.forEach((key, value) -> array[integer.getAndIncrement()] = key + "-" + value);
 
-        String encoded = builder.toString();
-        return encoded.substring(0, encoded.length() - 1);
+        return array;
     }
 }

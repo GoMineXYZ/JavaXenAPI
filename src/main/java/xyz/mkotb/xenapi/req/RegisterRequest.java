@@ -121,7 +121,7 @@ public class RegisterRequest extends BaseRequestImpl {
     }
 
     public Map<String, String> customFields() {
-        String value = castGet("custom_fields", String.class);
+        String[] value = castGet("custom_fields", String[].class);
 
         if (value == null) {
             return null;
