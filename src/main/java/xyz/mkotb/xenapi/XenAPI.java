@@ -131,7 +131,7 @@ public class XenAPI {
         debug("making request " + request.get("action") + " with base url " + baseUrl);
 
         if (requirements.containsKey(request.get("action")) && authType != null) {
-            AuthType requiredAuth = requirements.get("action");
+            AuthType requiredAuth = requirements.get(request.get("action"));
 
             if (requiredAuth.ordinal() > authType.ordinal()) {
                 throw new InvalidAuthenticationException(requiredAuth, authType);
