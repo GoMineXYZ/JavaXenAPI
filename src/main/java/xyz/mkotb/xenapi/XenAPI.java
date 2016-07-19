@@ -115,7 +115,7 @@ public class XenAPI {
                     .getBody().getObject();
 
             object.keySet().forEach((fun) -> map.put(fun, AuthType.valueOf(
-                    object.getString(fun))));
+                    object.getString(fun).toUpperCase())));
 
             return Collections.unmodifiableMap(map);
         } catch (UnirestException ex) {
