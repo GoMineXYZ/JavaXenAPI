@@ -19,5 +19,6 @@ public enum AuthType {
     PUBLIC,
     AUTHENTICATED,
     ADMINISTRATOR,
-    API_KEY
+    API_KEY,
+    PRIVATE // TODO actually find how this is used
 }
