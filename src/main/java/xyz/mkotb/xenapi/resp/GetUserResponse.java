@@ -27,8 +27,6 @@ public class GetUserResponse extends ExtendedUserResponse {
     private int friendCount;
     @SerializedName(value = "personal_friend_count")
     private int personalFriendCount;
-    @SerializedName(value = "custom_fields")
-    private String[] customFields;
 
     public int moodId() {
         return moodId;
@@ -40,9 +38,5 @@ public class GetUserResponse extends ExtendedUserResponse {
 
     public int personalFriendCount() {
         return personalFriendCount;
-    }
-
-    public Map<String, String> customFields() {
-        return XenUtils.decodeMap(customFields);
     }
 }
